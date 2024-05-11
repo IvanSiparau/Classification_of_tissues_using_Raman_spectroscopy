@@ -1,0 +1,104 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+h1 {
+    margin-bottom: 30px;
+    color: #1e90ff;
+    font-size: 36px;
+    font-weight: 800;
+}
+
+label {
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 20px;
+    display: block;
+    text-align: left;
+}
+
+input[type="file"] {
+    width: calc(100% - 20px);
+    padding: 15px;
+    margin: 0 10px 30px;
+    border: 2px solid #1e90ff;
+    border-radius: 10px;
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 16px;
+    background-color: #f8f9fa;
+    color: #333;
+    transition: border-color 0.3s ease;
+}
+
+input[type="file"]:focus {
+    border-color: #007bff;
+}
+
+button {
+    background-color: #1e90ff;
+    color: #fff;
+    border: none;
+    padding: 16px 32px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-size: 20px;
+    margin-bottom: 20px;
+    outline: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-transform: uppercase;
+}
+
+button:hover {
+    background-color: #007bff;
+}
+
+button:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#output {
+    margin-top: 30px;
+    text-align: left;
+    font-size: 18px;
+    color: #555;
+}
+
+#output p {
+    margin: 15px 0;
+}
+
+#output p.result {
+    font-weight: bold;
+    color: #1e90ff;
+}
+
+.loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #1e90ff;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spin 0.8s linear infinite;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

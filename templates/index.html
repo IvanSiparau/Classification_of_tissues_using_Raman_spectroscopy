@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Классификация клеток методом Рамановской спектроскопии</title>
+    <style>
+        body, html {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+
+        .container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding-top: 20px;
+        }
+
+        h1 {
+            color: #007bff;
+            font-size: 32px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 10px;
+            margin-top: 0;
+        }
+
+        input[type="file"] {
+            width: 300px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 2px solid #007bff;
+            border-radius: 10px;
+            font-size: 18px;
+            background-color: #f5f5f5;
+            color: #555;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="file"]:focus {
+            border-color: #0056b3;
+        }
+
+        .file-input-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 18px 36px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            font-size: 24px;
+            margin-bottom: 20px;
+            outline: none;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            text-transform: uppercase;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        button:active {
+            transform: translateY(1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #output-container {
+            width: 80%;
+            max-width: 600px;
+            padding: 20px;
+            border-radius: 15px;
+            background-color: #f5f5f5;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        #output {
+            text-align: left;
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        #output p {
+            margin: 10px 0;
+        }
+
+        #output p.result {
+            font-weight: bold;
+            color: #007bff;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        #ramanChart {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            border: 2px solid #007bff;
+            border-radius: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Классификация клеток методом<br>Рамановской спектроскопии</h1>
+        <div class="file-input-container">
+            <input type="file" id="file" accept=".txt">
+        </div>
+        <button id="classifyBtn">Классифицировать</button>
+        <div id="output-container">
+            <div id="output"></div>
+            <img id="ramanChart" src="" alt="Raman Spectrum">
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('classifyBtn').addEventListener('click', function() {
+            var fileInput = document.getElementById('file');
+            var file = fileInput.files[0];
+            var classifyBtn = document.getElementById('classifyBtn');
+            if (file) {
+                classifyBtn.disabled = true;
+                classifyBtn.innerHTML = 'Классификация...';
+                var formData = new FormData();
+                formData.append('file', file);
+                fetch('/classify', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(result => {
+                    document.getElementById('ramanChart').src = 'data:image/png;base64,' + result.graph;
+                    document.getElementById('ramanChart').style.display = 'block';
+                    var outputText = "<p class='result'>Результат классификации:</p>";
+                    for (var key in result.results) {
+                        outputText += "<p>" + key + ": " + result.results[key] + "</p>";
+                    }
+                    document.getElementById('output').innerHTML = outputText;
+                    classifyBtn.innerHTML = 'Классифицировать';
+                    classifyBtn.disabled = false;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Ошибка при обработке файла');
+                    classifyBtn.innerHTML = 'Классифицировать';
+                    classifyBtn.disabled = false;
+                });
+            } else {
+                alert('Пожалуйста, выберите файл для классификации.');
+            }
+        });
+    </script>
+</body>
+</html>
